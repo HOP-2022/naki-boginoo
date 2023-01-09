@@ -1,22 +1,43 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import boginoLogo from "./assets/logo.png";
 import Card from "./components/Card";
-
+import Task from "./components/Task";
 import "@fontsource/ubuntu";
+import axios from "axios";
 
 function App() {
-  const [list, setList] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const enterClick = (event) => {
-    if (event.code === "Enter") {
-      setList([...list, inputValue]);
-      setInputValue("");
+  const [link, setLink] = useState("");
+  const [url, setUrl] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+  const URL = "http://localhost:3001/links";
+  const linkSender = () => {
+    if (link !== "") {
+      console.log(link);
+      axios
+        .post(URL, {
+          link: link,
+        })
+        .then(function (res) {
+          console.log(res.data.data.link);
+          setUrl(res.data.data.link);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+          axios
+            .get(URL, {})
+            .then(function (res) {
+              setShortUrl(res.data.data[res.data.data.length - 1].shortLink);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
     }
   };
-  // console.log(inputValue);
-
   const styles = {
     container: {
       width: "100vw",
@@ -76,31 +97,27 @@ function App() {
     <div style={styles.container}>
       <Header />
       <div style={styles.body}>
-        <img src={boginoLogo} />
-        <div style={styles.inputbutContainer}>
+        <img src={boginoLogo} alt="" />
+        <form
+          style={styles.inputbutContainer}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
           <input
-            placeholder="https://www.web-huudas.mn"
             style={styles.input}
-            value={inputValue}
-            onKeyPress={enterClick}
-            onChange={(event) => {
-              setInputValue(event.target.value);
+            type="text"
+            id="inputId"
+            placeholder="https://www.web-huudas.mn"
+            onChange={(e) => {
+              setLink(e.target.value);
             }}
           />
-          <button
-            style={styles.button}
-            onClick={() => {
-              console.log(list);
-              setList([...list, inputValue]);
-              setInputValue("");
-            }}
-          >
+          <button style={styles.button} onClick={linkSender}>
             Богиносгох
           </button>
-        </div>
-        {list.map((el, index) => {
-          return <Card props={el} key={index} />;
-        })}
+        </form>
+        {url && <Task link={url} shortLink={shortUrl} />}
       </div>
       <Footer />
     </div>

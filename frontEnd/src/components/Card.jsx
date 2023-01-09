@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 function Card(props) {
-  const [value, setValue] = useState("");
   const styles = {
     container: {
       width: "773px",
@@ -67,7 +66,9 @@ function Card(props) {
           <div style={styles.p1}>Богино холбоос:</div>
           <div style={styles.p2}>{props.props}</div>
         </div>
-        <button style={styles.button} onClick={props}>
+        <button style={styles.button} onClick={()=>{
+          navigator.clipboard.writeText(props)
+        }}>
           Хуулж авах
         </button>
       </div>
