@@ -1,6 +1,6 @@
 import React from "react";
 
-function Card(props) {
+function Card({link, shortLink}) {
   const styles = {
     container: {
       width: "773px",
@@ -60,14 +60,14 @@ function Card(props) {
       <div style={styles.container}>
         <div>
           <div style={styles.p1}>Өгөгдсөн холбоос:</div>
-          <div style={styles.p2}>https://www.web-huudas.mn</div>
+          <div style={styles.p2}>{link}</div>
         </div>
         <div>
           <div style={styles.p1}>Богино холбоос:</div>
-          <div style={styles.p2}>{props.props}</div>
+          <div style={styles.p2}>{shortLink}</div>
         </div>
         <button style={styles.button} onClick={()=>{
-          navigator.clipboard.writeText(props)
+          navigator.clipboard.writeText(shortLink)
         }}>
           Хуулж авах
         </button>

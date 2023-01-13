@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import "@fontsource/ubuntu";
-
+import { Context } from "../components/HIstoryContext";
+import axios from "axios";
+import { useState } from "react";
 function Header() {
+  const { handleChange, history, setData } = useContext(Context);
+  const handleClick = async () => {
+    await axios
+      .get("http://localhost:3001/links", {})
+      .then(function (response) {
+        console.log(response.data.data);
+        setData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    handleChange();
+  };
   const styles = {
     container: {
       width: "100vw",
@@ -10,7 +25,7 @@ function Header() {
       flexDirection: "row",
       justifyContent: "flex-end",
       alignItems: "center",
-      marginTop: "40px"
+      marginTop: "40px",
     },
     howItWorks: {
       color: "#02B589",
@@ -40,6 +55,9 @@ function Header() {
   };
   return (
     <div style={styles.container}>
+      <button style={styles.button} onClick={handleClick}>
+        Түүх
+      </button>
       <div style={styles.howItWorks}>xэрхэн ажилладаж вэ?</div>
       <button style={styles.button}>Нэвтрэх</button>
     </div>

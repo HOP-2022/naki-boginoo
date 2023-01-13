@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import Redirect from "./components/Redirect";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { HistoryContext } from "./components/HIstoryContext";
 
 const router = createBrowserRouter([
   {
@@ -21,5 +22,7 @@ root.render(
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>
-  <RouterProvider router={router} />
+  <HistoryContext>
+    <RouterProvider router={router} />
+  </HistoryContext>
 );

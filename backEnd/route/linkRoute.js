@@ -5,8 +5,13 @@ const {
   createLink,
   getLinks,
   getLink,
+  deleteLink,
 } = require("../controller/linkController");
 
-router.get("/", getLinks).post("/", createLink).get("/:id", getLink);
+router
+  .get("/", getLinks)
+  .post("/", createLink)
+  .get("/:id", getLink)
+  .delete("/", deleteLink);
 
 module.exports = router;

@@ -5,9 +5,10 @@ import React from "react";
 const Redirect = () => {
   const { id } = useParams();
   axios
-    .get(`http://localhost:8000/links/${id}`)
+    .get(`http://localhost:3001/links/${id}`)
     .then(function (response) {
-      window.location.replace(response.data.data.URL);
+      console.log(response);
+      window.location.replace(response.data.data.link);
     })
     .catch(function (error) {
       console.log(error);

@@ -1,43 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import boginoLogo from "./assets/logo.png";
 import Card from "./components/Card";
 import Task from "./components/Task";
+import { Context } from "./components/HIstoryContext";
 import "@fontsource/ubuntu";
 import axios from "axios";
 
 function App() {
-  const [link, setLink] = useState("");
-  const [url, setUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
-  const URL = "http://localhost:3001/links";
-  const linkSender = () => {
-    if (link !== "") {
-      console.log(link);
-      axios
-        .post(URL, {
-          link: link,
-        })
-        .then(function (res) {
-          console.log(res.data.data.link);
-          setUrl(res.data.data.link);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-        .then(function () {
-          axios
-            .get(URL, {})
-            .then(function (res) {
-              setShortUrl(res.data.data[res.data.data.length - 1].shortLink);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        });
-    }
-  };
   const styles = {
     container: {
       width: "100vw",
@@ -93,6 +64,27 @@ function App() {
       color: "#FFFFFF",
     },
   };
+  const [link, setLink] = useState("");
+  const [url, setUrl] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+  const URL = "http://localhost:3001/links";
+  const { history, handleChange, data } = useContext(Context);
+  const linkSender = () => {
+    if (link !== "") {
+      console.log(link);
+      axios
+        .post(URL, {
+          link: link,
+        })
+        .then(function (res) {
+          setUrl(res.data.data.link);
+          setShortUrl("localhost:3000/" + res.data.data._id);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
   return (
     <div style={styles.container}>
       <Header />
@@ -118,6 +110,13 @@ function App() {
           </button>
         </form>
         {url && <Task link={url} shortLink={shortUrl} />}
+        {history
+          ? data.map((el, index) => {
+              return (
+                <Card link={el.link} shortLink={el.shortLink} key={index} />
+              );
+            })
+          : ""}
       </div>
       <Footer />
     </div>
