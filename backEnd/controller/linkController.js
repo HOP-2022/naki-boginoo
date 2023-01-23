@@ -35,7 +35,7 @@ exports.createLink = async (request, response, next) => {
 
 exports.getLinks = async (request, response, next) => {
   try {
-    const links = await LinkModel.find();
+    const links = await LinkModel.find({userID: request.id});
     response.status(200).json({
       message: true,
       data: links,

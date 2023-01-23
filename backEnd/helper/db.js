@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const uri =
-  "mongodb+srv://Nak-1:GODNAKI1010@cluster0.9svejtq.mongodb.net/?retryWrites=true&w=majority";
-
+const uri = process.env.mongodb;
+// const JWT_SECRET = process.env.jwt;
+console.log(uri);
 const connect = async () => {
   try {
     await mongoose.connect(uri);

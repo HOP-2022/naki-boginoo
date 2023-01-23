@@ -1,27 +1,28 @@
 const connect = require("./helper/db");
 connect();
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const cors = require("cors");
-const port = 3001;
+const port = process.env.PORT || 3001 ;
 const app = express();
 
 const linkRouter = require("./route/linkRoute");
-app.use(cors());
+const userRouter = require("./route/userRoute");
+
 app.use(express.json());
 app.use("/links", linkRouter);
-
-app.get("/", (require, response) => {
-  response.send("Hello worlddsgs");
-});
+app.use("/users", userRouter);
 
 const corsOptions = {
   origin: "http://localhost:3000",
-  credentials: true, //access-control-allow-credentials:true
+  credentials: true,
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
 app.listen(port, () => {
-  `server is running at localhost:${port}`;
+  console.log(`server is running at localhost:${port} =====> 3000`);
 });

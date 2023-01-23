@@ -8,6 +8,9 @@ const {
   deleteLink,
 } = require("../controller/linkController");
 
+const { auth } = require("../middlewares/auth");
+router.use(auth);
+
 router
   .get("/", getLinks)
   .post("/", createLink)
