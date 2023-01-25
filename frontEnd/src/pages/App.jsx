@@ -66,16 +66,25 @@ function App() {
   };
   const [link, setLink] = useState("");
   const [url, setUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
+  const [shortUrl, setShortUrl] = useState(
+    "https://www.youtube.com/watch?v=CgeUfinpJeA"
+  );
   const URL = "http://localhost:3001/links";
   const { history, handleChange, data } = useContext(Context);
   const linkSender = () => {
     if (link !== "") {
       console.log(link);
-      axios
-        .post(URL, {
-          link: link,
-        })
+      axios({
+        url: URL,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-type": "application/json",
+        },
+        data: {
+          link,
+        },
+      })
         .then(function (res) {
           setUrl(res.data.data.link);
           setShortUrl("localhost:3000/" + res.data.data._id);

@@ -9,12 +9,12 @@ const {
 } = require("../controller/linkController");
 
 const { auth } = require("../middlewares/auth");
-router.use(auth);
 
+// router.use();
 router
-  .get("/", getLinks)
-  .post("/", createLink)
+  .get("/", auth, getLinks)
+  .post("/", auth, createLink)
   .get("/:id", getLink)
-  .delete("/", deleteLink);
+  .delete("/", auth, deleteLink);
 
 module.exports = router;

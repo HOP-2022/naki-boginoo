@@ -84,18 +84,14 @@ exports.signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const existingUser = await UserModel.findOne({ email: email });
-    if (existingUser) {
-      return res
-        .status(404)
-        .json({ message: "email esvl nuuts ug buru bainaa" });
+    if (!existingUser) {
+      return res.status(401).json({ message: "email buru bainaa" });
     }
-    const matchPassword = await bcrypt.compare(password, existingUser);
+    const matchPassword = await bcrypt.compare(password, existingUser.password);
     if (!matchPassword) {
-      return res
-        .status(404)
-        .json({ message: "email esvl nuuts ug buru bainaa" });
+      return res.status(402).json({ message: "nuuts ug buru bainaa" });
     }
-    const token = jwt.sign({ email: result.email, id: result._id }, SECRET_KEY);
+    const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, SECRET_KEY);
     res.status(201).json({ user: existingUser, token: token });
   } catch (error) {
     console.log(error);

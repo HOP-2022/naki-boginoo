@@ -3,6 +3,7 @@ const { model, Schema } = require("mongoose");
 const UserSchema = new Schema({
   email: String,
   password: String,
+  // userId: String,
   registerDate: { type: Date, default: Date.now },
 });
 const UserModel = model("User", UserSchema);

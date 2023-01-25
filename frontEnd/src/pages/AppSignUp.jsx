@@ -4,8 +4,34 @@ import Header from "../components/Header";
 import boginoLogo from "../assets/logo.png";
 import "@fontsource/ubuntu";
 import Footer from "../components/Footer";
+import { useRef } from "react";
+import axios from "axios";
 
 function AppSignUp() {
+  const email = useRef("");
+  const password1 = useRef("");
+  const password2 = useRef("");
+  const handleChange = () => {
+    if (
+      email.current.value &&
+      password1.current.value &&
+      password2.current.value != "" &&
+      password1.current.value == password2.current.value
+    ) {
+      axios
+        .post("http://localhost:3001/users/signup", {
+          email: email.current.value,
+          password: password1.current.value,
+        })
+        .then(function (response) {
+          console.log(response.data);
+          window.location.replace("/signin")
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
   const styles = {
     container: {
       width: "100vw",
@@ -122,6 +148,7 @@ function AppSignUp() {
             style={styles.input}
             placeholder="name@mail.domain"
             type="email"
+            ref={email}
           />
         </div>
         <div>
@@ -130,6 +157,7 @@ function AppSignUp() {
             style={styles.input}
             placeholder="••••••••••"
             type="password"
+            ref={password1}
           />
         </div>
         <div>
@@ -138,9 +166,12 @@ function AppSignUp() {
             style={styles.input}
             placeholder="••••••••••"
             type="password"
+            ref={password2}
           />
         </div>
-        <button style={styles.nevtreh1}>Бүртгүүлэх</button>
+        <button style={styles.nevtreh1} onClick={handleChange}>
+          Бүртгүүлэх
+        </button>
       </div>
       <Footer />
     </div>

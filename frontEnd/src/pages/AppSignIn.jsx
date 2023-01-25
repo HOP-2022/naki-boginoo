@@ -1,39 +1,30 @@
 import React from "react";
+import App from "./App";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import boginoLogo from "../assets/logo.png";
 import "@fontsource/ubuntu";
 import Footer from "../components/Footer";
-import { useRef } from "react";
+import { useRef, useHistoryContext } from "react";
 import axios from "axios";
 
 function AppSignIn() {
   const email = useRef();
   const password = useRef();
-  const handleChange = async () => {
-    // console.log(email, password);
+  const handleChange = () => {
     axios
-      .post("http://localhost:3001/users/signin", {
-        email: email,
-        password: password,
+      .post("http://localhost:3001/users", {
+        email: email.current.value,
+        password: password.current.value,
       })
       .then(function (response) {
-        console.log("LOG: ", response);
+        console.log(response.data);
+        window.location.replace("/");
+        localStorage.setItem("token", response.data.token)
       })
       .catch(function (error) {
         console.log(error);
       });
-    // const response = await axios({
-    //   url: "http://localhost:3000/users/signin",
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    //   data: {
-    //     email: email,
-    //     password: password,
-    //   },
-    // });
   };
   const styles = {
     container: {
@@ -152,6 +143,7 @@ function AppSignIn() {
             style={styles.input}
             placeholder="name@mail.domain"
             type="email"
+            ref={email}
           />
         </div>
         <div>
@@ -160,6 +152,7 @@ function AppSignIn() {
             style={styles.input}
             placeholder="••••••••••"
             type="password"
+            ref={password}
           />
         </div>
         <div style={styles.container1}>
