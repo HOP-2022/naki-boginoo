@@ -1,14 +1,17 @@
 import React from "react";
-import App from "./App";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import boginoLogo from "../assets/logo.png";
 import "@fontsource/ubuntu";
 import Footer from "../components/Footer";
-import { useRef, useHistoryContext } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 function AppSignIn() {
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
   const email = useRef();
   const password = useRef();
   const handleChange = () => {
@@ -20,7 +23,7 @@ function AppSignIn() {
       .then(function (response) {
         console.log(response.data);
         window.location.replace("/");
-        localStorage.setItem("token", response.data.token)
+        localStorage.setItem("token", response.data.token);
       })
       .catch(function (error) {
         console.log(error);
@@ -88,7 +91,7 @@ function AppSignIn() {
     },
     checkbox: { border: "1px solid #02B589" },
     namaigsana: {
-      paddingRight: "100px",
+      paddingRight: "130px",
       fontFamily: "Ubuntu",
       fontStyle: "normal",
       fontWeight: 400,
@@ -119,6 +122,8 @@ function AppSignIn() {
       lineHeight: "18px",
       textDecorationLine: "underline",
       color: "#333333",
+      border: "0px solid",
+      backgroundColor: "#fff",
     },
     link2: {
       fontFamily: "Ubuntu",
@@ -128,11 +133,14 @@ function AppSignIn() {
       lineHeight: "18px",
       textDecorationLine: "underline",
       color: "#02B589",
+      border: "0px solid",
+      backgroundColor: "#fff",
     },
   };
   return (
     <div style={styles.container}>
-      {/* <div style={styles.howItWorks}>xэрхэн ажилладаж вэ?</div> */}
+      {/* <div style={styles.howItWorks}>xэрхэн ажилладаг вэ?</div> */}
+      
       <Header />
       <div style={styles.body}>
         <img src={boginoLogo} alt="" />
@@ -151,13 +159,16 @@ function AppSignIn() {
           <input
             style={styles.input}
             placeholder="••••••••••"
-            type="password"
+            type={passwordShown ? "text" : "password"}
             ref={password}
           />
         </div>
         <div style={styles.container1}>
           <input type="checkbox" style={styles.checkbox} />
           <div style={styles.namaigsana}>Намайг сана</div>
+          <button style={styles.link2} onClick={togglePassword}>
+            Нууц үгээ харах
+          </button>
           <Link style={styles.link1}>Нууц үгээ мартсан</Link>
         </div>
         <button style={styles.nevtreh1} onClick={handleChange}>

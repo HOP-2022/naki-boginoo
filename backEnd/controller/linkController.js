@@ -16,7 +16,6 @@ const isUrlHttp = require("is-url-http");
 // };
 
 exports.createLink = async (request, response, next) => {
-  console.log("dasd", request.body);
   const ITSLink = await LinkModel.findOne({ link: request.body.link });
   if (ITSLink) {
     return response.status(201).json({ data: ITSLink });

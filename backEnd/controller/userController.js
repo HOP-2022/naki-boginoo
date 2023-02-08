@@ -60,9 +60,34 @@ const SECRET_KEY = "itssecretkey";
 //   }
 // };
 
+exports.getUsers = async (request, response, next) => {
+  try {
+    const users = await UserModel.find();
+    response.status(200).json({
+      message: true,
+      data: users,
+    });
+  } catch (error) {
+    return response.status(400), json({ message: error, data: null });
+  }
+};
+
+exports.updateUser = async (request, response, next) => {
+  const { id } = request.params;
+  try {
+    const post = await UserModel.findByIdAndUpdate(id, { ...request.body });
+    response.status(200).json({
+      message: "user with ${request.params.id} id is updated",
+      data: post,
+    });
+  } catch (error) {
+    return response.status(400), json({ message: error, data: null });
+  }
+};
+
 exports.signup = async (req, res, next) => {
   try {
-    const { password, email } = req.body;
+    const { password, email, role } = req.body;
     const existingUser = await UserModel.findOne({ email: email });
     if (existingUser) {
       return res.status(409).json({ message: "burtgeltei acc bainaa" });
@@ -71,6 +96,7 @@ exports.signup = async (req, res, next) => {
     const result = await UserModel.create({
       email: email,
       password: hashPassword,
+      role: role,
     });
     const token = jwt.sign({ email: result.email, id: result._id }, SECRET_KEY);
     res.status(201).json({ user: result, token: token });
@@ -91,7 +117,10 @@ exports.signin = async (req, res, next) => {
     if (!matchPassword) {
       return res.status(402).json({ message: "nuuts ug buru bainaa" });
     }
-    const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, SECRET_KEY);
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser._id },
+      SECRET_KEY
+    );
     res.status(201).json({ user: existingUser, token: token });
   } catch (error) {
     console.log(error);

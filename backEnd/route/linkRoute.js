@@ -9,8 +9,6 @@ const {
 } = require("../controller/linkController");
 
 const { auth } = require("../middlewares/auth");
-
-// router.use();
 router
   .get("/", auth, getLinks)
   .post("/", auth, createLink)

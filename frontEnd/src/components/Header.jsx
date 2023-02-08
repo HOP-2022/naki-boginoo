@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 import "@fontsource/ubuntu";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Context } from "../components/HIstoryContext";
 import axios from "axios";
-import { useState } from "react";
 function Header() {
-  const { handleChange, history, setData } = useContext(Context);
+  const { handleChange, setData, setAuth } = useContext(Context);
   const handleClick = async () => {
     await axios
       .get("http://localhost:3001/links", {
@@ -23,6 +22,12 @@ function Header() {
       });
     handleChange();
   };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setAuth("");
+  };
+  const { pathname } = useLocation();
   const styles = {
     container: {
       width: "100vw",
@@ -41,7 +46,8 @@ function Header() {
       fontSize: "25px",
       lineHeight: "23px",
       texTransform: "uppercase",
-      paddingRight: "80px",
+      paddingRight: "30px",
+      textDecoration: "none",
     },
     button: {
       width: "182px",
@@ -56,7 +62,7 @@ function Header() {
       backgroundColor: "#02B589",
       border: "1px solid #02B589",
       borderRadius: "100px",
-      marginRight: "80px",
+      marginRight: "30px",
     },
     button1: {
       display: "flex",
@@ -75,17 +81,66 @@ function Header() {
       border: "1px solid #02B589",
       borderRadius: "100px",
       textDecoration: "none",
-      marginRight: "80px",
+      marginRight: "30px",
+    },
+    hidden: {
+      visibility: "hidden",
     },
   };
   return (
     <div style={styles.container}>
-      <button style={styles.button} onClick={handleClick}>
+      <button
+        style={
+          pathname === "/signin" ||
+          pathname === "/signup" ||
+          pathname === "/roles"
+            ? styles.hidden
+            : styles.button
+        }
+        onClick={handleClick}
+      >
         Түүх
       </button>
-      <div style={styles.howItWorks}>xэрхэн ажилладаж вэ?</div>
-      <Link style={styles.button1} to="/signin">
+      <Link style={styles.howItWorks} to="/">
+        xэрхэн ажилладаг вэ?
+      </Link>
+      <Link
+        style={
+          pathname === "/signin" ||
+          pathname === "/signup" ||
+          pathname === "/roles"
+            ? styles.hidden
+            : styles.button1
+        }
+        to="/signin"
+      >
         Нэвтрэх
+      </Link>
+      <Link
+        style={
+          pathname === "/signin" ||
+          pathname === "/signup" ||
+          pathname === "/roles"
+            ? styles.hidden
+            : styles.button1
+        }
+        to="/signin"
+        onClick={logout}
+      >
+        Гарах
+      </Link>
+      <Link
+        style={
+          pathname === "/signin" ||
+          pathname === "/signup" ||
+          pathname === "/roles"
+            ? styles.hidden
+            : styles.button1
+        }
+        to="/roles"
+        onClick={logout}
+      >
+        roles
       </Link>
     </div>
   );

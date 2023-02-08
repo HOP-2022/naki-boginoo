@@ -1,37 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import boginoLogo from "../assets/logo.png";
 import "@fontsource/ubuntu";
 import Footer from "../components/Footer";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 function AppSignUp() {
-  const email = useRef("");
-  const password1 = useRef("");
-  const password2 = useRef("");
-  const handleChange = () => {
-    if (
-      email.current.value &&
-      password1.current.value &&
-      password2.current.value != "" &&
-      password1.current.value == password2.current.value
-    ) {
-      axios
-        .post("http://localhost:3001/users/signup", {
-          email: email.current.value,
-          password: password1.current.value,
-        })
-        .then(function (response) {
-          console.log(response.data);
-          window.location.replace("/signin")
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
-  };
   const styles = {
     container: {
       width: "100vw",
@@ -136,9 +111,50 @@ function AppSignUp() {
       color: "#02B589",
     },
   };
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+
+  const email = useRef("");
+  const password1 = useRef("");
+  const password2 = useRef("");
+
+  const superadmin = useRef("");
+  const admin = useRef("");
+
+  const handleChange = () => {
+    let userRole = "user";
+    if (superadmin.current.checked === true) {
+      userRole = "superadmin";
+    }
+    if (admin.current.checked === true) {
+      userRole = "admin";
+    }
+    if (
+      email.current.value &&
+      password1.current.value &&
+      password2.current.value !== "" &&
+      password1.current.value === password2.current.value
+    ) {
+      axios
+        .post("http://localhost:3001/users/signup", {
+          email: email.current.value,
+          password: password1.current.value,
+          role: userRole,
+        })
+        .then(function (response) {
+          console.log(response.data);
+          window.location.replace("/signin");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
   return (
     <div style={styles.container}>
-      <div style={styles.howItWorks}>xэрхэн ажилладаж вэ?</div>
+      <Header />
       <div style={styles.body}>
         <img src={boginoLogo} alt="" />
         <div style={styles.nevtreh}>Бүртгүүлэх</div>
@@ -156,8 +172,8 @@ function AppSignUp() {
           <input
             style={styles.input}
             placeholder="••••••••••"
-            type="password"
             ref={password1}
+            type={passwordShown ? "text" : "password"}
           />
         </div>
         <div>
@@ -165,9 +181,24 @@ function AppSignUp() {
           <input
             style={styles.input}
             placeholder="••••••••••"
-            type="password"
             ref={password2}
+            type={passwordShown ? "text" : "password"}
           />
+        </div>
+        <button onClick={togglePassword}>show password</button>
+        <div style={{ display: "flex", flexDirection: "row" , paddingRight: "45px"}}>
+          <input
+            type="checkbox"
+            ref={admin}
+          />
+          <div>admin</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <input
+            type="checkbox"
+            ref={superadmin}
+          />
+          <div>super admin</div>
         </div>
         <button style={styles.nevtreh1} onClick={handleChange}>
           Бүртгүүлэх

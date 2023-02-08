@@ -11,8 +11,9 @@ const app = express();
 
 const linkRouter = require("./route/linkRoute");
 const userRouter = require("./route/userRoute");
+const users1Router = require("./route/users1Route");
 
-app.use(express.json());
+// app.use(express.json());
 const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -21,6 +22,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use("/links", linkRouter);
 app.use("/users", userRouter);
+app.use("/users1", users1Router)
 
 app.listen(port, () => {
   console.log(`server is running at localhost:${port} =====> 3000`);

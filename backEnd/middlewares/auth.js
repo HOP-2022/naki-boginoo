@@ -8,6 +8,7 @@ module.exports.auth = (req, res, next) => {
       token = token.split(" ")[1];
       let user = jwt.verify(token, SECRET_KEY);
       req.userId = user.id;
+      req.userRole = user.role;
       next();
     } else {
       res.status(401).json({ message: "handah erhgu herglegch bain" });

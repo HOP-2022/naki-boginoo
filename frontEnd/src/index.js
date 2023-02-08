@@ -7,6 +7,7 @@ import { HistoryContext } from "./components/HIstoryContext";
 import App from "./pages/App";
 import AppSignIn from "./pages/AppSignIn";
 import AppSignUp from "./pages/AppSignUp";
+import AppRoles from "./pages/AppRoles";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <AppSignUp />,
+  },
+  {
+    path: "/roles",
+    element: <AppRoles />,
   },
 ]);
 

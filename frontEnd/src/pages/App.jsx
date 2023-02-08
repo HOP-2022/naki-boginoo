@@ -66,11 +66,9 @@ function App() {
   };
   const [link, setLink] = useState("");
   const [url, setUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState(
-    "https://www.youtube.com/watch?v=CgeUfinpJeA"
-  );
+  const [shortUrl, setShortUrl] = useState();
   const URL = "http://localhost:3001/links";
-  const { history, handleChange, data } = useContext(Context);
+  const { history, data } = useContext(Context);
   const linkSender = () => {
     if (link !== "") {
       console.log(link);
